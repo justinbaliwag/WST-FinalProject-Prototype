@@ -13,11 +13,21 @@ This repository contains the source code for the **Marqueuet** project. If you a
 ##  Project Directory Structure
 ```text
 Marqueuet/
-├── index.html        (Structure & semantic markup only)
+server/
+├── index.js          (Express app: page serving + /api/search)
+├── auth.js           (local sign up / sign in / guest + Google)
+└── .data/            (local accounts file, git-ignored)
+css/
 ├── style.css         (Apple-grade translucent glassmorphism & styles)
-├── app.js            (Spring physics & OSINT data logic)
-├── .gitignore        (Prevents local OS/editor files from being tracked)
-└── README.md         (Team documentation & deployment guides)
+└── auth.css          (sign-in sheet styles)
+js/
+├── script.js         (Spring physics & OSINT data logic)
+├── landing.js        (Header, scroll reveals, typewriter)
+└── auth.js           (Sign-in sheet on the landing page)
+docs/                 (Architecture + Google setup guides)
+index.html            (Structure & semantic markup only)
+.gitignore            (Prevents local OS/editor files from being tracked)
+README.md             (Team documentation & deployment guides)
 ```
 
 * **`index.html`**: Handles the layout, sections, navigation bars, and modals.

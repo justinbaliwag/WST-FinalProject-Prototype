@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+node_modules/
 .DS_Store
 Thumbs.db
 .vscode/
-node_modules/
-=======
-node_modules/
 .env
->>>>>>> prototype/main
+
+# local demo accounts + sessions live here; never commit them
+server/.data/
+.data/

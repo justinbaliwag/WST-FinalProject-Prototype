@@ -1,11 +1,20 @@
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const auth = require('./auth');
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
+
+// Local accounts: sign up / sign in / guest. Everything stays on this machine.
+app.use('/api/auth', auth.router);
+
+// Serve the app itself so the login cookie works (file:// pages cannot keep one)
+const ROOT_DIR = path.join(__dirname, '..');
+app.use(express.static(ROOT_DIR, { extensions: ['html'] }));
 
 // Paste your copied Apify token here:
 const APIFY_TOKEN = process.env.APIFY_TOKEN || "YOUR_APIFY_TOKEN_HERE";
@@ -69,7 +78,7 @@ app.post('/api/search', async (req, res) => {
     }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
