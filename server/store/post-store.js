@@ -64,10 +64,20 @@ function savePosts(posts, runInfo = {}) {
     return { added, total: db.posts.length };
 }
 
+/* Joining words and filler that say nothing about which brand was asked for.
+   Without this, "Jollibee vs McDo and Huawei" matched any post containing
+   the word "and". */
+const STOP_WORDS = new Set([
+    'and', 'vs', 'versus', 'the', 'for', 'with', 'from', 'that', 'this', 'are', 'was', 'has'
+]);
+
 /* Read saved posts back, newest first, optionally narrowed by query words. */
 function findPosts(query, limit = 20) {
     const db = readDb();
-    const words = String(query || '').toLowerCase().split(/\s+/).filter(w => w.length > 2);
+    const words = String(query || '').toLowerCase()
+        .split(/\s+/)
+        .map(w => w.replace(/[.,;:!?]+$/g, ''))
+        .filter(w => w.length > 2 && !STOP_WORDS.has(w));
     const matched = words.length
         ? db.posts.filter(p => words.some(w => (p.caption || '').toLowerCase().includes(w)))
         : db.posts;
