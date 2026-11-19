@@ -284,11 +284,9 @@ router.post('/signout', (req, res) => {
    button says so plainly instead of faking a login.
    Setup guide: docs/GOOGLE-SIGN-IN.md
    ------------------------------------------------------------------------ */
-const GOOGLE = {
-    clientId: (process.env.GOOGLE_CLIENT_ID || '').trim(),
-    clientSecret: (process.env.GOOGLE_CLIENT_SECRET || '').trim(),
-    redirectUri: (process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/auth/google/callback').trim()
-};
+const settings = require('./config/settings');
+
+const GOOGLE = settings.google;
 const googleReady = () => !!(GOOGLE.clientId && GOOGLE.clientSecret);
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';

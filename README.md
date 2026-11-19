@@ -1,12 +1,11 @@
 # Marqueuet — Team Collaboration Guide
 
-The project is hosted and automatically deployed via GitHub Pages:
-
-**Live Demo & Deployment:**  [https://justinbaliwag.github.io/Marqueuet/](https://justinbaliwag.github.io/Marqueuet/)
-
-> * Any approved pull request merged into the main branch automatically updates this live URL.
-
----
+> **Run it locally:** open a terminal in the project folder and run `npm install`, then `npm start`,
+> then open **http://localhost:3000** in your browser. Do not double-click `index.html` — login and
+> search need the little server, because a page opened straight from disk cannot keep a login cookie.
+>
+> **No sign-up needed to demo:** with no `.env` file the app runs on built-in **sample posts** and
+> shows a **Sample data** badge. Copy `.env.example` to `.env` only if you want live TikTok posts.
 
 This repository contains the source code for the **Marqueuet** project. If you are new to Git and GitHub, this guide explains the core concepts and provides the exact terminal commands needed to collaborate effectively without overwriting each other's work.
 
@@ -14,25 +13,35 @@ This repository contains the source code for the **Marqueuet** project. If you a
 ```text
 Marqueuet/
 server/
-├── index.js          (Express app: page serving + /api/search)
-├── auth.js           (local sign up / sign in / guest + Google)
-└── .data/            (local accounts file, git-ignored)
+├── index.js            (entry point: just starts the server)
+├── composition/app.js  (the one place that joins everything together)
+├── edge/routes.js      (web routes: search, posts, explain, auth)
+├── use-cases/          (what the app does: search-posts, explain-decision)
+├── cleaning/pipeline.js (rules that drop spam, reposts and off-topic posts)
+├── store/post-store.js (saves cleaned posts to data/posts.json)
+├── adapters/           (outside sources: sample data, TikTok via Apify)
+├── config/settings.js  (the one file that picks the data source)
+├── auth.js             (local sign up / sign in / guest + Google)
+└── .data/              (local accounts file, git-ignored)
 css/
 ├── style.css         (Apple-grade translucent glassmorphism & styles)
 └── auth.css          (sign-in sheet styles)
 js/
-├── script.js         (Spring physics & OSINT data logic)
+├── data/demo-data.js (ALL sample data: entities, matchups, feed posts)
+├── script.js         (spring physics, charts, compare + explain logic)
 ├── landing.js        (Header, scroll reveals, typewriter)
 └── auth.js           (Sign-in sheet on the landing page)
+data/                 (cleaned posts saved by the server, git-ignored)
 docs/                 (Architecture + Google setup guides)
 index.html            (Structure & semantic markup only)
-.gitignore            (Prevents local OS/editor files from being tracked)
+.env.example          (copy to .env only for live data)
 README.md             (Team documentation & deployment guides)
 ```
 
 * **`index.html`**: Handles the layout, sections, navigation bars, and modals.
 * **`style.css`**: Handles color palettes, typography, responsive grids, and translucent blur materials.
-* **`app.js`**: Handles simulated social feeds, comparison inputs, chart updates, and spring interactions.
+* **`script.js`**: Handles the comparison input, charts, spring interactions and the plain-English explainer.
+* **`demo-data.js`**: Holds every sample number the app shows. Change this file only, and the whole demo shows a different dataset.
 ---
 
 ## 1. What is "Cloning"?
@@ -65,7 +74,7 @@ cd Desktop
 ### Step 3: Clone the Repository
 Run the clone command using the repository URL:
 ```bash
-git clone https://github.com/justinbaliwag/Marqueuet.git
+git clone https://github.com/justinbaliwag/WST-FinalProject-Prototype.git
 ```
 
 ### Step 4: Enter the Cloned Directory
@@ -128,7 +137,7 @@ git push -u origin feature/your-feature-name
 
 Once your branch is pushed:
 
-1. Open the repository on GitHub: `https://github.com/justinbaliwag/Marqueuet`
+1. Open the repository on GitHub: `https://github.com/justinbaliwag/WST-FinalProject-Prototype`
 2. Look for the banner highlighting your recently pushed branch and click **Compare & pull request**.
 3. Add a concise title and description summarizing what was added or changed.
 4. Click **Create pull request**.

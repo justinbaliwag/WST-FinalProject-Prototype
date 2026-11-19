@@ -4,7 +4,8 @@
    The sheet opens when "Get Started" is clicked. Three ways in:
      - Sign up / Sign in  -> local server (accounts on this computer)
      - Continue with guest -> browser flag only, no account
-     - Google             -> button present, honestly marked as coming next
+     - Google             -> real Google sign-in when GOOGLE_CLIENT_ID and
+                             GOOGLE_CLIENT_SECRET are in .env (else it says so)
    ========================================================================== */
 
 (() => {

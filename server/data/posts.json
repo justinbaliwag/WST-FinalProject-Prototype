@@ -1,0 +1,200 @@
+{
+  "version": 1,
+  "posts": [
+    {
+      "id": "p2",
+      "platform": "facebook",
+      "author": "South Luzon Foodies",
+      "caption": "Chickenjoy spicy bucket size comparison vs McDo new crispy chicken cut—comments are 4,200+ debating which gravy & rice combo is more sulit.",
+      "title": "Chickenjoy spicy bucket size comparison vs McDo new crispy chicken cut—comments are 4,200+ debating which gravy & rice combo is more sulit.",
+      "likes": null,
+      "comments": 0,
+      "url": "",
+      "query": "Jollibee vs McDo",
+      "source": "sample",
+      "fingerprint": "chickenjoy spicy bucket size comparison vs mcdo new crispy chicken cut comments are 4",
+      "savedAt": "2026-11-19T12:33:19.996Z"
+    },
+    {
+      "id": "raw2",
+      "platform": "facebook",
+      "author": "South Luzon Foodies",
+      "caption": "Chickenjoy spicy bucket vs McDo crispy chicken cut!!! #sulit #friedchicken",
+      "title": "Chickenjoy spicy bucket vs McDo crispy chicken cut!!! #sulit #friedchicken",
+      "likes": 0,
+      "comments": 0,
+      "url": "",
+      "query": "Jollibee vs McDo",
+      "source": "sample",
+      "fingerprint": "chickenjoy spicy bucket vs mcdo crispy chicken cut",
+      "savedAt": "2026-11-19T12:33:19.996Z"
+    },
+    {
+      "id": "raw7",
+      "platform": "tiktok",
+      "author": "@coffee.beats",
+      "caption": "Jollibee Chickenjoy vs McDo Chicken McDo taste test with my cousins. Watch till the end!",
+      "title": "Jollibee Chickenjoy vs McDo Chicken McDo taste test with my cousins. Watch till the end!",
+      "likes": 0,
+      "comments": 0,
+      "url": "",
+      "query": "Jollibee vs McDo",
+      "source": "sample",
+      "fingerprint": "jollibee chickenjoy vs mcdo chicken mcdo taste test with my cousins watch till the",
+      "savedAt": "2026-11-19T12:33:19.996Z"
+    },
+    {
+      "id": "raw4",
+      "platform": "tiktok",
+      "author": "@fruitstand.batangas",
+      "caption": "Fresh apples from Benguet, 80 pesos per kilo today only. Apples apples apples!",
+      "title": "Fresh apples from Benguet, 80 pesos per kilo today only. Apples apples apples!",
+      "likes": 0,
+      "comments": 0,
+      "url": "",
+      "matchup": "",
+      "query": "Apple vs Samsung",
+      "source": "sample",
+      "fingerprint": "fresh apples from benguet 80 pesos per kilo today only apples apples apples",
+      "savedAt": "2026-11-19T12:33:45.968Z"
+    },
+    {
+      "id": "raw5",
+      "platform": "facebook",
+      "author": "Random Story",
+      "caption": "I ate an apple today and thought about my childhood.",
+      "title": "I ate an apple today and thought about my childhood.",
+      "likes": 0,
+      "comments": 0,
+      "url": "",
+      "matchup": "",
+      "query": "Apple vs Samsung",
+      "source": "sample",
+      "fingerprint": "i ate an apple today and thought about my childhood",
+      "savedAt": "2026-11-19T12:33:45.968Z"
+    },
+    {
+      "id": "raw6",
+      "platform": "instagram",
+      "author": "@techbench.ph",
+      "caption": "APPLE iPhone 16 Pro camera test: night mode vs Samsung Galaxy S24 Ultra zoom, side by side clips.",
+      "title": "APPLE iPhone 16 Pro camera test: night mode vs Samsung Galaxy S24 Ultra zoom, side by side clips.",
+      "likes": 0,
+      "comments": 0,
+      "url": "",
+      "matchup": "",
+      "query": "Apple vs Samsung",
+      "source": "sample",
+      "fingerprint": "apple iphone 16 pro camera test night mode vs samsung galaxy s24 ultra zoom",
+      "savedAt": "2026-11-19T12:33:45.968Z"
+    },
+    {
+      "id": "p1",
+      "platform": "tiktok",
+      "author": "@batstate.kape",
+      "caption": "KKOPI pastel study corner in Alangilan is packed right now—oat spanish latte still undefeated vs BigBrew pila across the street #kkopi #alangilancoffee",
+      "title": "KKOPI pastel study corner in Alangilan is packed right now—oat spanish latte still undefeated vs BigBrew pila across the street #kkopi #alangilancoffee",
+      "likes": 4900,
+      "comments": 0,
+      "url": "",
+      "matchup": "KKOPI vs BigBrew",
+      "query": "KKOPI vs BigBrew vs JustCoffee",
+      "source": "sample",
+      "fingerprint": "kkopi pastel study corner in alangilan is packed right now oat spanish latte still",
+      "savedAt": "2026-11-19T12:33:45.971Z"
+    }
+  ],
+  "runs": [
+    {
+      "query": "Jollibee vs McDo",
+      "source": "sample",
+      "kept": 3,
+      "added": 3,
+      "dropped": 9,
+      "reasons": {
+        "duplicates": 0,
+        "spam": 1,
+        "outOfScope": 8
+      },
+      "at": "2026-11-19T12:33:19.996Z"
+    },
+    {
+      "query": "Jollibee vs McDo",
+      "source": "sample",
+      "kept": 3,
+      "added": 0,
+      "dropped": 9,
+      "reasons": {
+        "duplicates": 0,
+        "spam": 1,
+        "outOfScope": 8
+      },
+      "at": "2026-11-19T12:33:45.941Z"
+    },
+    {
+      "query": "Apple vs Samsung",
+      "source": "sample",
+      "kept": 3,
+      "added": 3,
+      "dropped": 9,
+      "reasons": {
+        "duplicates": 0,
+        "spam": 1,
+        "outOfScope": 8
+      },
+      "at": "2026-11-19T12:33:45.968Z"
+    },
+    {
+      "query": "KKOPI vs BigBrew vs JustCoffee",
+      "source": "sample",
+      "kept": 1,
+      "added": 1,
+      "dropped": 11,
+      "reasons": {
+        "duplicates": 1,
+        "spam": 1,
+        "outOfScope": 9
+      },
+      "at": "2026-11-19T12:33:45.971Z"
+    },
+    {
+      "query": "Jollibee vs McDo",
+      "source": "sample",
+      "kept": 3,
+      "added": 0,
+      "dropped": 9,
+      "reasons": {
+        "duplicates": 0,
+        "spam": 1,
+        "outOfScope": 8
+      },
+      "at": "2026-11-19T12:34:03.634Z"
+    },
+    {
+      "query": "Jollibee",
+      "source": "sample",
+      "kept": 2,
+      "added": 0,
+      "dropped": 10,
+      "reasons": {
+        "duplicates": 0,
+        "spam": 1,
+        "outOfScope": 9
+      },
+      "at": "2026-11-19T12:34:03.666Z"
+    },
+    {
+      "query": "Apple vs Samsung",
+      "source": "sample",
+      "kept": 1,
+      "added": 0,
+      "dropped": 11,
+      "reasons": {
+        "duplicates": 0,
+        "spam": 1,
+        "outOfScope": 10
+      },
+      "at": "2026-11-19T12:34:03.670Z"
+    }
+  ]
+}
