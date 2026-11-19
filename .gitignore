@@ -7,3 +7,12 @@ Thumbs.db
 # local demo accounts + sessions live here; never commit them
 server/.data/
 .data/
+
+# the local post store (cleaned demo posts saved by the pipeline)
+/data/
+
+# editor/agent scratch files
+.hormachuelos/
+
+# keep the demo data that ships with the app
+!js/data/

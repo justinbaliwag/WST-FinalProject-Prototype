@@ -149,107 +149,18 @@
     const PALETTE = [
         { hex: 'var(--c0)', soft: 'var(--c0-soft)', text: 'var(--c0-text)' },
         { hex: 'var(--c1)', soft: 'var(--c1-soft)', text: 'var(--c1-text)' },
-        { hex: 'var(--c2)', soft: 'var(--c2-soft)', text: 'var(--c2-text)' }
+        { hex: 'var(--c2)', soft: 'var(--c2-soft)', text: 'var(--c2-text)' },
+        { hex: '#7C5CFF', soft: '#EDE9FF', text: '#3B2A85' },
+        { hex: '#E8A33D', soft: '#FDF2DF', text: '#7A5214' }
     ];
+    const MAX_COMPARE = 5;      // how many entities can be compared at once
+    const ANIMATED_CHARTS = 3;  // the spring-driven charts animate the top 3
 
-    const ENTITIES = {
-        'jollibee': {
-            name: 'Jollibee', type: 'brand', peer: 'McDo', skuSample: 'Chickenjoy',
-            mentions: 12420, avgLikes: 940, commentRatio: 86, shareAmp: 90, velocity: 89, sentiment: 68, ugc: 93, reach: 95,
-            drivers: { speed: 74, aesthetic: 75, value: 87, quality: 93, service: 86 },
-            platforms: { tiktok: 48, instagram: 24, facebook: 28 }
-        },
-        'mcdo': {
-            name: 'McDo', type: 'brand', peer: 'Jollibee', skuSample: 'Chicken McDo',
-            mentions: 9340, avgLikes: 780, commentRatio: 73, shareAmp: 77, velocity: 83, sentiment: 55, ugc: 82, reach: 90,
-            drivers: { speed: 90, aesthetic: 79, value: 85, quality: 80, service: 81 },
-            platforms: { tiktok: 41, instagram: 31, facebook: 28 }
-        },
-        'kkopi': {
-            name: 'KKOPI', type: 'brand', peer: 'BigBrew', skuSample: 'Iced Spanish Latte',
-            mentions: 6840, avgLikes: 620, commentRatio: 89, shareAmp: 83, velocity: 80, sentiment: 74, ugc: 87, reach: 75,
-            drivers: { speed: 63, aesthetic: 94, value: 79, quality: 89, service: 91 },
-            platforms: { tiktok: 46, instagram: 41, facebook: 13 }
-        },
-        'bigbrew': {
-            name: 'BigBrew', type: 'brand', peer: 'KKOPI', skuSample: 'Kape Brusko',
-            mentions: 8150, avgLikes: 480, commentRatio: 65, shareAmp: 71, velocity: 87, sentiment: 47, ugc: 80, reach: 88,
-            drivers: { speed: 91, aesthetic: 59, value: 96, quality: 72, service: 69 },
-            platforms: { tiktok: 53, instagram: 17, facebook: 30 }
-        },
-        'justcoffee': {
-            name: 'JustCoffee', type: 'brand', peer: 'BigBrew', skuSample: 'Sea Salt Latte',
-            mentions: 4920, avgLikes: 530, commentRatio: 80, shareAmp: 69, velocity: 68, sentiment: 69, ugc: 74, reach: 64,
-            drivers: { speed: 76, aesthetic: 87, value: 82, quality: 85, service: 83 },
-            platforms: { tiktok: 41, instagram: 39, facebook: 20 }
-        },
-        'rhode': {
-            name: 'Rhode', type: 'brand', peer: 'Rare Beauty', skuSample: 'Peptide Lip Tint',
-            mentions: 19400, avgLikes: 1620, commentRatio: 88, shareAmp: 92, velocity: 94, sentiment: 76, ugc: 95, reach: 91,
-            drivers: { speed: 78, aesthetic: 97, value: 71, quality: 90, service: 82 },
-            platforms: { tiktok: 54, instagram: 38, facebook: 8 }
-        },
-        'rare beauty': {
-            name: 'Rare Beauty', type: 'brand', peer: 'Rhode', skuSample: 'Soft Pinch Blush',
-            mentions: 22100, avgLikes: 1580, commentRatio: 91, shareAmp: 87, velocity: 89, sentiment: 82, ugc: 94, reach: 94,
-            drivers: { speed: 83, aesthetic: 92, value: 84, quality: 94, service: 91 },
-            platforms: { tiktok: 49, instagram: 42, facebook: 9 }
-        },
-        'apple': {
-            name: 'Apple', type: 'brand', peer: 'Samsung', skuSample: 'iPhone 16 Pro',
-            mentions: 42800, avgLikes: 2450, commentRatio: 82, shareAmp: 88, velocity: 94, sentiment: 60, ugc: 95, reach: 98,
-            drivers: { speed: 85, aesthetic: 96, value: 56, quality: 94, service: 86 },
-            platforms: { tiktok: 44, instagram: 39, facebook: 17 }
-        },
-        'samsung': {
-            name: 'Samsung', type: 'brand', peer: 'Apple', skuSample: 'Galaxy S24 Ultra',
-            mentions: 36400, avgLikes: 1980, commentRatio: 77, shareAmp: 82, velocity: 87, sentiment: 64, ugc: 89, reach: 93,
-            drivers: { speed: 88, aesthetic: 88, value: 76, quality: 91, service: 80 },
-            platforms: { tiktok: 45, instagram: 35, facebook: 20 }
-        },
-        'iphone 16 pro': {
-            name: 'iPhone 16 Pro', type: 'product', parentBrand: 'Apple', peer: 'Galaxy S24 Ultra',
-            mentions: 28900, avgLikes: 1840, commentRatio: 87, shareAmp: 91, velocity: 93, sentiment: 58, ugc: 94, reach: 95,
-            drivers: { speed: 92, aesthetic: 95, value: 54, quality: 93, service: 85 },
-            platforms: { tiktok: 48, instagram: 38, facebook: 14 }
-        },
-        'galaxy s24 ultra': {
-            name: 'Galaxy S24 Ultra', type: 'product', parentBrand: 'Samsung', peer: 'iPhone 16 Pro',
-            mentions: 24100, avgLikes: 1620, commentRatio: 84, shareAmp: 85, velocity: 86, sentiment: 69, ugc: 88, reach: 90,
-            drivers: { speed: 94, aesthetic: 89, value: 75, quality: 92, service: 81 },
-            platforms: { tiktok: 46, instagram: 36, facebook: 18 }
-        },
-        'galaxy s24': {
-            name: 'Galaxy S24', type: 'product', parentBrand: 'Samsung', peer: 'iPhone 16 Pro',
-            mentions: 21400, avgLikes: 1490, commentRatio: 81, shareAmp: 82, velocity: 84, sentiment: 67, ugc: 86, reach: 88,
-            drivers: { speed: 91, aesthetic: 87, value: 77, quality: 90, service: 80 },
-            platforms: { tiktok: 45, instagram: 36, facebook: 19 }
-        },
-        'nike air max dn': {
-            name: 'Nike Air Max Dn', type: 'product', parentBrand: 'Nike', peer: 'Adidas Ultraboost 5',
-            mentions: 11400, avgLikes: 920, commentRatio: 81, shareAmp: 84, velocity: 85, sentiment: 66, ugc: 87, reach: 84,
-            drivers: { speed: 79, aesthetic: 94, value: 65, quality: 88, service: 80 },
-            platforms: { tiktok: 51, instagram: 39, facebook: 10 }
-        },
-        'adidas ultraboost 5': {
-            name: 'Adidas Ultraboost 5', type: 'product', parentBrand: 'Adidas', peer: 'Nike Air Max Dn',
-            mentions: 9800, avgLikes: 860, commentRatio: 86, shareAmp: 79, velocity: 80, sentiment: 75, ugc: 83, reach: 80,
-            drivers: { speed: 85, aesthetic: 86, value: 73, quality: 94, service: 84 },
-            platforms: { tiktok: 46, instagram: 43, facebook: 11 }
-        },
-        'sony wh-1000xm5': {
-            name: 'Sony WH-1000XM5', type: 'product', parentBrand: 'Sony', peer: 'Bose QC Ultra',
-            mentions: 8900, avgLikes: 740, commentRatio: 88, shareAmp: 82, velocity: 81, sentiment: 73, ugc: 86, reach: 85,
-            drivers: { speed: 84, aesthetic: 91, value: 74, quality: 93, service: 80 },
-            platforms: { tiktok: 47, instagram: 38, facebook: 15 }
-        },
-        'bose qc ultra': {
-            name: 'Bose QC Ultra', type: 'product', parentBrand: 'Bose', peer: 'Sony WH-1000XM5',
-            mentions: 7200, avgLikes: 690, commentRatio: 84, shareAmp: 76, velocity: 77, sentiment: 78, ugc: 80, reach: 79,
-            drivers: { speed: 82, aesthetic: 85, value: 69, quality: 95, service: 86 },
-            platforms: { tiktok: 42, instagram: 40, facebook: 18 }
-        }
-    };
+    /* ---- All demo data comes from one file: js/data/demo-data.js ---- */
+    const DATA_SOURCE = window.DemoData || { entities: {}, matchups: { brand: [], product: [] }, posts: [], rawPosts: [] };
+    const ENTITIES = DATA_SOURCE.entities;
+    const MATCHUP_SUGGESTIONS = DATA_SOURCE.matchups;
+    const PULSE_POSTS = DATA_SOURCE.posts;
 
     /* ==================== 3. STATE & MATCHUP DATA ==================== */
     const state = {
@@ -268,100 +179,13 @@
         ]
     };
 
-    const MATCHUP_SUGGESTIONS = {
-        brand: [
-            { q: 'Jollibee vs McDo', tag: 'Fast Food Share of Voice & Sentiment', icon: 'chart' },
-            { q: 'KKOPI vs BigBrew', tag: 'Alangilan Student Coffee Pulse', icon: 'coffee' },
-            { q: 'KKOPI vs BigBrew vs JustCoffee', tag: '3-Brand Local Cafe Benchmark', icon: 'layers' },
-            { q: 'Rhode vs Rare Beauty', tag: 'Creator Beauty Advocacy & Velocity', icon: 'spark' },
-            { q: 'Apple vs Galaxy S24', tag: 'Test Mismatched Guardrail (Brand vs SKU)', icon: 'shield' }
-        ],
-        product: [
-            { q: 'iPhone 16 Pro vs Galaxy S24 Ultra', tag: 'Flagship camera and battery talk', icon: 'phone' },
-            { q: 'Nike Air Max Dn vs Adidas Ultraboost 5', tag: 'Running Shoe Comfort & Durability', icon: 'zap' },
-            { q: 'Sony WH-1000XM5 vs Bose QC Ultra', tag: 'ANC Headphone Community Depth', icon: 'music' }
-        ]
-    };
-
-    const PULSE_POSTS = [
-        {
-            id: 'p1', cat: 'food', plat: 'tiktok', handle: '@batstate.kape', time: '18m ago',
-            sentiment: 'Positive', sentClass: 'sent-pos',
-            caption: 'KKOPI pastel study corner in Alangilan is packed right now—oat spanish latte still undefeated vs BigBrew pila across the street #kkopi #alangilancoffee',
-            views: '42.8K', likes: '4.9K', ratio: '11.4% C/L', velocity: '+184% vel',
-            matchup: 'KKOPI vs BigBrew', mode: 'brand'
-        },
-        {
-            id: 'p2', cat: 'food', plat: 'facebook', handle: 'South Luzon Foodies', time: '41m ago',
-            sentiment: 'Positive', sentClass: 'sent-pos',
-            caption: 'Chickenjoy spicy bucket size comparison vs McDo new crispy chicken cut—comments are 4,200+ debating which gravy & rice combo is more sulit.',
-            views: '118K', likes: '9.4K', ratio: '14.2% C/L', velocity: '+210% vel',
-            matchup: 'Jollibee vs McDo', mode: 'brand'
-        },
-        {
-            id: 'p3', cat: 'tech', plat: 'instagram', handle: '@techbench.ph', time: '1h ago',
-            sentiment: 'Mixed', sentClass: 'sent-mix',
-            caption: 'Concert zoom test at Philippine Arena: Galaxy S24 Ultra 5x optical vs iPhone 16 Pro low-light video stabilization. Full raw clips in reel.',
-            views: '295K', likes: '24.1K', ratio: '9.8% C/L', velocity: '+165% vel',
-            matchup: 'iPhone 16 Pro vs Galaxy S24 Ultra', mode: 'product'
-        },
-        {
-            id: 'p4', cat: 'beauty', plat: 'tiktok', handle: '@glowcheck.mnl', time: '2h ago',
-            sentiment: 'Positive', sentClass: 'sent-pos',
-            caption: 'Humidity wear test in Manila traffic: Rare Beauty Soft Pinch vs Rhode Pocket Blush. Look at the pigment hold after 6 hours!',
-            views: '164K', likes: '19.2K', ratio: '12.6% C/L', velocity: '+148% vel',
-            matchup: 'Rhode vs Rare Beauty', mode: 'brand'
-        },
-        {
-            id: 'p5', cat: 'tech', plat: 'tiktok', handle: '@runclub.bgc', time: '3h ago',
-            sentiment: 'Positive', sentClass: 'sent-pos',
-            caption: '10km tempo run review: Adidas Ultraboost 5 Lightboost foam energy return vs Nike Air Max Dn dynamic air pods.',
-            views: '88.4K', likes: '7.1K', ratio: '10.9% C/L', velocity: '+122% vel',
-            matchup: 'Nike Air Max Dn vs Adidas Ultraboost 5', mode: 'product'
-        }
-    ];
-
     /* ==================== 4. ENTITY RESOLUTION & GUARDRAIL LOGIC ==================== */
     function getProfile(rawName) {
-        const clean = rawName.trim();
-        const key = clean.toLowerCase();
-        if (ENTITIES[key]) return { ...ENTITIES[key] };
-
-        const isSkuPattern = /\b(pro|max|ultra|plus|dn|xm\d|\d+)\b/i.test(clean);
-        const r = seededRng(hashSeed(key));
-        const t = 35 + Math.floor(r() * 25);
-        const ig = 25 + Math.floor(r() * 20);
-        const fb = Math.max(10, 100 - t - ig);
-
-        return {
-            name: clean,
-            type: isSkuPattern ? 'product' : state.category,
-            mentions: 4200 + Math.floor(r() * 9000),
-            avgLikes: 410 + Math.floor(r() * 750),
-            commentRatio: 58 + Math.floor(r() * 35),
-            shareAmp: 55 + Math.floor(r() * 36),
-            velocity: 56 + Math.floor(r() * 38),
-            sentiment: 38 + Math.floor(r() * 52),
-            ugc: 60 + Math.floor(r() * 34),
-            reach: 62 + Math.floor(r() * 32),
-            drivers: {
-                speed: 55 + Math.floor(r() * 38),
-                aesthetic: 55 + Math.floor(r() * 38),
-                value: 55 + Math.floor(r() * 38),
-                quality: 60 + Math.floor(r() * 35),
-                service: 55 + Math.floor(r() * 38)
-            },
-            platforms: { tiktok: t, instagram: ig, facebook: fb }
-        };
+        return window.WST.source.getProfiles([rawName], state.category)[0];
     }
 
     function parsePromptEntities(q) {
-        return q
-            .replace(/^(compare|benchmark|analyze)\s+/i, '')
-            .split(/\s+(?:vs\.?|versus|and)\s+|\s*,\s*|\s*&\s*/i)
-            .map(x => x.trim())
-            .filter(Boolean)
-            .slice(0, 3);
+        return window.WSTDomain.parsePromptEntities(q);
     }
 
     /* ==================== 5. RENDER COMPARE PAGE & SIDEBAR ==================== */
@@ -510,7 +334,7 @@
 
         const totMentions = list.reduce((s, e) => s + e.mentions, 0);
         document.getElementById('resMatchupTitle').textContent = list.map(e => e.name).join(' vs ');
-        document.getElementById('resEntityBadge').textContent = `${list[0].type === 'product' ? 'Products (product vs product)' : 'Brands (brand vs brand)'} • last 30 days`;
+        document.getElementById('resEntityBadge').textContent = `${list[0].type === 'product' ? 'Products (product vs product)' : 'Brands (brand vs brand)'} • ${list.length} compared • last 30 days`;
         document.getElementById('resLegendItems').innerHTML = list.map(e => `
             <div class="l-chip">
                 <span class="l-dot" style="background:${e.color.hex}"></span>
@@ -523,6 +347,59 @@
         drawSentimentScatter();
         drawRadarAndDrivers();
         buildVerdict();
+        explainWithServer();
+    }
+
+    /* ===== EXPLAINER: ask the server for the rule-based answer + chart choice ===== */
+    function explainWithServer() {
+        const box = document.getElementById('explainBox');
+        if (!box) return;
+        const list = state.activeProfiles;
+        if (!list || list.length < 2) { box.hidden = true; return; }
+
+        const payload = {
+            query: state.activeQuery,
+            profiles: list.map(e => ({
+                name: e.name, mentions: e.mentions, sentiment: e.sentiment,
+                velocity: e.velocity, commentRatio: e.commentRatio
+            }))
+        };
+
+        const explainer = window.WST && window.WST.explain;
+        if (explainer) {
+            explainer.run(list, state.activeQuery)
+                .then(data => {
+                    if (!data || !data.ok) { box.hidden = true; return; }
+                    showExplanation(box, data.answer, data.chart, data.note, data.evidence);
+                })
+                .catch(() => { box.hidden = true; });
+            return;
+        }
+
+        fetch('/api/explain', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (!data || !data.ok) { box.hidden = true; return; }
+                showExplanation(box, data.answer, data.chart, data.note, data.evidence);
+            })
+            .catch(() => { box.hidden = true; });
+    }
+
+    /* Draw the explainer's reply. One place, so the plugged path and the
+       direct path look identical. */
+    function showExplanation(box, answer, chart, note, evidence) {
+        box.hidden = false;
+        document.getElementById('explainAnswer').textContent = answer || '';
+        document.getElementById('explainChart').textContent =
+            chart ? `Chart chosen for this data: ${chart}` : '';
+        document.getElementById('explainMethod').textContent = note || '';
+        document.getElementById('explainEvidence').innerHTML = (evidence || []).map(ev =>
+            `<li><b>${ev.author}</b> — ${ev.caption}</li>`
+        ).join('');
     }
 
     /* ===== VERDICT: one plain answer built from the same numbers the charts use ===== */
@@ -530,38 +407,48 @@
         const list = state.activeProfiles;
         if (!list || list.length < 2) return;
 
-        const totTalk = list.reduce((s, e) => s + e.mentions, 0) || 1;
-        const shares = list.map(e => ({ e, pct: Math.round(e.mentions / totTalk * 100) }));
-        const ranked = [...shares].sort((a, b) => b.pct - a.pct);
-        const win = ranked[0].e;
-        const runnerUp = ranked[1];
-        const gap = ranked[0].pct - runnerUp.pct;
+        const data = window.WST.domain.summarise(list);
+        document.getElementById('verdictLine').textContent = data.sentence;
+        renderVerdictShares(data.ranked);
 
-        const bestS = [...list].sort((a, b) => b.sentiment - a.sentiment)[0];
-        const bestV = [...list].sort((a, b) => b.velocity - a.velocity)[0];
-        const bestC = [...list].sort((a, b) => b.commentRatio - a.commentRatio)[0];
-
-        const lead = gap <= 2 ? 'is roughly tied with' : (gap >= 15 ? 'is well ahead of' : 'is ahead of');
-
-        document.getElementById('verdictLine').textContent =
-            gap <= 2
-                ? `${win.name} and ${runnerUp.e.name} are neck and neck`
-                : `${win.name} ${lead} ${runnerUp.e.name}`;
-
-        document.getElementById('verdictBarA').style.width = `${ranked[0].pct}%`;
-        document.getElementById('verdictBarA').style.background = win.color.hex;
-
-        const points = [
-            ['How people feel', `${bestS.name} gets the friendliest talk (${bestS.sentiment >= 0 ? '+' : ''}${bestS.sentiment}% more positive than negative).`],
-            ['How fast it grows', `${bestV.name} is growing fastest today (${bestV.velocity >= 100 ? '+' : ''}${bestV.velocity}% in 24 hours).`],
-            ['Who replies most', `${bestC.name} has the liveliest comment section (${bestC.commentRatio}/100 replies per like).`]
-        ];
-        document.getElementById('verdictPoints').innerHTML = points.map(([label, text]) =>
+        document.getElementById('verdictPoints').innerHTML = data.points.map(([label, text]) =>
             `<li><span class="dot"></span><span><b>${label}:</b> ${text}</span></li>`
         ).join('');
 
         document.getElementById('verdictFresh').textContent =
-            `${totTalk.toLocaleString()} public posts, last 30 days`;
+            `${data.total.toLocaleString()} public posts, last 30 days`;
+    }
+
+    /* Two entities keep one clean bar. Three or more get a bar each, so
+       nobody is left out of the answer. */
+    function renderVerdictShares(ranked) {
+        const split = document.getElementById('verdictSplit');
+        const rails = document.getElementById('verdictRails');
+        const barA = document.getElementById('verdictBarA');
+        if (!split || !rails || !barA) return;
+
+        if (ranked.length <= 2) {
+            split.hidden = false;
+            rails.hidden = true;
+            rails.innerHTML = '';
+            barA.style.width = `${ranked[0].pct}%`;
+            barA.style.background = ranked[0].e.color.hex;
+            return;
+        }
+
+        split.hidden = true;
+        rails.hidden = false;
+        rails.innerHTML = ranked.map(r => `
+            <div class="verdict-rail">
+                <div class="verdict-rail-head">
+                    <span style="color:${r.e.color.text}">${r.e.name}</span>
+                    <span>${r.pct}%</span>
+                </div>
+                <div class="verdict-rail-track">
+                    <span class="verdict-rail-fill" style="width:${r.pct}%; background:${r.e.color.hex}"></span>
+                </div>
+            </div>
+        `).join('');
     }
 
     function drawSovVisual() {
@@ -595,7 +482,7 @@
 
         const updateDonutDOM = () => {
             let off = 0;
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < ANIMATED_CHARTS; i++) {
                 const ring = document.getElementById('sovRing' + i);
                 const e = list[i];
                 const sharePct = Math.max(0, chartSprings.sovShares[i].value);
@@ -615,7 +502,7 @@
             document.getElementById('sovCenterPct').textContent = `${leadVal}%`;
         };
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < ANIMATED_CHARTS; i++) {
             const targetPct = list[i] ? (val(list[i]) / tot) * 100 : 0;
             chartSprings.sovShares[i].animateTo(targetPct, {
                 damping: 0.92,
@@ -624,17 +511,26 @@
             });
         }
 
+        renderExtraCompareBars();
+
         // Platform Split Bars with Spring Width Interpolation
         const plats = [['tiktok', 'TikTok'], ['instagram', 'Instagram'], ['facebook', 'Facebook']];
         const platBox = document.getElementById('sovPlatBarsBox');
+        const segs = Math.max(3, list.length);
+        if (platBox.querySelector('.p-track') && platBox.dataset.segs !== String(segs)) {
+            platBox.innerHTML = '';
+        }
         if (!platBox.querySelector('.p-track')) {
+            platBox.dataset.segs = String(segs);
+            chartSprings.platShares = {};
+            plats.forEach(([pk]) => {
+                chartSprings.platShares[pk] = Array.from({ length: segs }, () => new SpringValue(0));
+            });
             platBox.innerHTML = plats.map(([pk, pl]) => `
                 <div>
                     <div class="p-row-lbl"><span>${pl}</span></div>
                     <div class="p-track" id="platTrack_${pk}">
-                        <div class="p-seg" id="platSeg_${pk}_0" style="background:var(--c0)"></div>
-                        <div class="p-seg" id="platSeg_${pk}_1" style="background:var(--c1)"></div>
-                        <div class="p-seg" id="platSeg_${pk}_2" style="background:var(--c2)"></div>
+                        ${Array.from({ length: segs }, (_, i) => `<div class="p-seg" id="platSeg_${pk}_${i}" style="background:var(--c${Math.min(i, 2)})"></div>`).join('')}
                     </div>
                 </div>
             `).join('');
@@ -642,9 +538,10 @@
 
         plats.forEach(([pk]) => {
             const ptot = list.reduce((s, e) => s + val(e) * (e.platforms[pk] / 100), 0) || 1;
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < segs; i++) {
                 const targetSh = list[i] ? ((val(list[i]) * (list[i].platforms[pk] / 100)) / ptot) * 100 : 0;
                 const segEl = document.getElementById(`platSeg_${pk}_${i}`);
+                if (!segEl) continue;
                 chartSprings.platShares[pk][i].animateTo(targetSh, {
                     damping: 0.94,
                     response: 0.36,
@@ -663,8 +560,39 @@
         `;
     }
 
-    function drawSentimentScatter() {
+    /* Bars for entities 4 and 5, which the 3-ring donut cannot show. */
+    function renderExtraCompareBars() {
+        const box = document.getElementById('extraCompareBars');
+        if (!box) return;
         const list = state.activeProfiles;
+        const rest = list.slice(ANIMATED_CHARTS);
+        if (!rest.length) { box.hidden = true; box.innerHTML = ''; return; }
+
+        const val = e => state.sovMode === 'engagement' ? e.weightedEngage : e.mentions;
+        const tot = list.reduce((s, e) => s + val(e), 0) || 1;
+
+        box.hidden = false;
+        box.innerHTML = `
+            <div class="xb-head">
+                <strong style="font-size:13px;">Also compared</strong>
+                <span class="xb-note">${state.sovMode === 'engagement' ? 'share of reactions' : 'share of posts'}</span>
+            </div>
+            ${rest.map(e => {
+                const pct = Math.round((val(e) / tot) * 100);
+                return `
+                <div>
+                    <div class="xb-head">
+                        <span class="xb-name" style="color:${e.color.text}">${e.name}</span>
+                        <span class="xb-pct">${pct}%</span>
+                    </div>
+                    <div class="xb-track"><div class="xb-fill" style="width:${pct}%; background:${e.color.hex}"></div></div>
+                </div>`;
+            }).join('')}
+        `;
+    }
+
+    function drawSentimentScatter() {
+        const list = state.activeProfiles.slice(0, ANIMATED_CHARTS);
         const W = 480, H = 210, L = 40, R = 20, T = 20, B = 30;
         const pw = W - L - R, ph = H - T - B;
         const x = s => L + (Math.max(10, Math.min(98, s)) / 100) * pw;
@@ -897,7 +825,7 @@
             polyEl.setAttribute('points', pts.map(p => p.map(n => n.toFixed(1)).join(',')).join(' '));
         };
 
-        for (let bIdx = 0; bIdx < 3; bIdx++) {
+        for (let bIdx = 0; bIdx < ANIMATED_CHARTS; bIdx++) {
             const e = list[bIdx];
             const polyEl = document.getElementById(`radarPoly_${bIdx}`);
             if (!e) {
@@ -1140,8 +1068,8 @@
 
         const inp = document.getElementById('compareInput');
         inp.placeholder = cat === 'brand'
-            ? 'Compare two brands, e.g. Jollibee vs McDo or KKOPI vs BigBrew...'
-            : 'Compare two products, e.g. iPhone 16 Pro vs Galaxy S24 Ultra...';
+            ? 'Compare up to 5 brands, e.g. Jollibee vs McDo or KKOPI vs BigBrew vs JustCoffee...'
+            : 'Compare up to 5 products, e.g. iPhone 16 Pro vs Galaxy S24 Ultra...';
 
         document.getElementById('guardrailCard').classList.remove('visible');
         renderCompareSuggestions();
@@ -1151,45 +1079,53 @@
         if (forcedMode) setCompareCategory(forcedMode);
         document.getElementById('compareInput').value = queryStr;
 
-        const names = parsePromptEntities(queryStr);
         const card = document.getElementById('guardrailCard');
+        const result = window.WST.compare.run(queryStr, state.category);
 
-        if (names.length < 2) {
-            const first = names[0] || 'Jollibee';
-            const prof = getProfile(first);
-            const rival = prof.peer || 'McDo';
-            document.getElementById('guardrailHeading').textContent = 'Two Equal Entities Required';
-            document.getElementById('guardrailText').textContent = `Enter at least two competing ${state.category}s separated by "vs".`;
+        if (result.kind === 'needTwo') {
+            document.getElementById('guardrailHeading').textContent = 'At least Two Equal Entities Required';
+            document.getElementById('guardrailText').textContent = `Enter at least two competing ${state.category}s separated by "vs" (up to ${result.max}).`;
             document.getElementById('guardrailButtons').innerHTML = `
-                <button type="button" class="fix-chip" onclick="executeComparison('${first} vs ${rival}')">Compare ${first} vs ${rival}</button>
+                <button type="button" class="fix-chip" onclick="executeComparison('${result.first} vs ${result.rival}')">Compare ${result.first} vs ${result.rival}</button>
             `;
             card.classList.add('visible');
             switchView('compare');
             return;
         }
 
-        const profiles = names.map(getProfile);
-        const types = new Set(profiles.map(p => p.type));
+        /* A name this demo has no data for is refused, never filled with made-up numbers. */
+        if (result.kind === 'unknown') {
+            const unknown = result.unknown;
+            const heading = unknown.length === 1
+                ? `No data for "${unknown[0].name}"`
+                : `No data for ${unknown.map(p => `"${p.name}"`).join(' or ')}`;
+            document.getElementById('guardrailHeading').textContent = heading;
+            document.getElementById('guardrailText').textContent = `This demo only knows a fixed set of ${state.category}s, and it will not invent numbers for a name it has never seen. Compare one of these instead (up to ${result.max} at once):`;
+            document.getElementById('guardrailButtons').innerHTML = result.suggestions.map(item => `
+                <button type="button" class="fix-chip" onclick="executeComparison('${item.q}')">${item.q}</button>
+            `).join('');
+            card.classList.add('visible');
+            switchView('compare');
+            return;
+        }
 
-        if (types.size > 1) {
-            const brandItem = profiles.find(p => p.type === 'brand');
-            const prodItem = profiles.find(p => p.type === 'product');
-            const brandPeer = prodItem.parentBrand || brandItem.peer || 'Samsung';
-            const skuPeer = brandItem.skuSample || 'iPhone 16 Pro';
-
+        if (result.kind === 'mixedKinds') {
+            const brandItem = result.brandItem;
+            const prodItem = result.prodItem;
             document.getElementById('guardrailHeading').textContent = `Not a fair comparison: "${brandItem.name}" is a brand, "${prodItem.name}" is one product`;
             document.getElementById('guardrailText').textContent = `A whole brand and a single product can't be compared fairly. Pick two of the same kind:`;
             document.getElementById('guardrailButtons').innerHTML = `
-                <button type="button" class="fix-chip" onclick="executeComparison('${brandItem.name} vs ${brandPeer}', 'brand')">Brands: ${brandItem.name} vs ${brandPeer}</button>
-                <button type="button" class="fix-chip" onclick="executeComparison('${skuPeer} vs ${prodItem.name}', 'product')">Products: ${skuPeer} vs ${prodItem.name}</button>
+                <button type="button" class="fix-chip" onclick="executeComparison('${brandItem.name} vs ${result.brandPeer}', 'brand')">Brands: ${brandItem.name} vs ${result.brandPeer}</button>
+                <button type="button" class="fix-chip" onclick="executeComparison('${result.skuPeer} vs ${prodItem.name}', 'product')">Products: ${result.skuPeer} vs ${prodItem.name}</button>
             `;
             card.classList.add('visible');
             switchView('compare');
             return;
         }
 
+        const profiles = result.profiles;
         card.classList.remove('visible');
-        state.activeQuery = profiles.map(p => p.name).join(' vs ');
+        state.activeQuery = result.query;
         state.activeProfiles = profiles;
 
         if (!state.recentHistory.some(r => r.query.toLowerCase() === state.activeQuery.toLowerCase())) {
@@ -1317,4 +1253,20 @@
     renderHomePulse();
     state.activeProfiles = ['Jollibee', 'McDo'].map(getProfile);
     renderVisualResults();
+
+    /* Tell the reader, honestly, whether these numbers are sample data. */
+    fetch('/api/source')
+        .then(r => r.json())
+        .then(info => {
+            document.querySelectorAll('.demo-badge').forEach(badge => {
+                if (info.sample) {
+                    badge.textContent = 'Sample data';
+                    badge.title = 'Numbers on this screen are sample data for the demo, not measured';
+                } else {
+                    badge.textContent = 'Live data';
+                    badge.title = 'Numbers come from live TikTok posts through Apify';
+                }
+            });
+        })
+        .catch(() => {});
 })();

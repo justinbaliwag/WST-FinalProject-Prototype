@@ -314,7 +314,30 @@ viewable.
 
 ---
 
-## 7. Honest risks
+## 7. What was built (round 1)
+
+| Piece | File | Status |
+| --- | --- | --- |
+| All demo data in one file | `js/data/demo-data.js` | done |
+| Cleaning pipeline (spam / reposts / out of scope) | `server/cleaning/pipeline.js` | done |
+| Local post store (`data/posts.json`) | `server/store/post-store.js` | done |
+| Sample source that needs no token | `server/adapters/sample-source.js` | done |
+| Apify source behind the same contract | `server/adapters/apify-source.js` | done |
+| Search use case | `server/use-cases/search-posts.js` | done |
+| Explain use case (retrieve, pick chart, write answer) | `server/use-cases/explain-decision.js` | done |
+| One settings file choosing the source | `server/config/settings.js` | done |
+| HTTP edge + composition root | `server/edge/routes.js`, `server/composition/app.js` | done |
+| Compare up to 5 entities | `js/script.js` (`MAX_COMPARE`, extra bars) | done |
+| Browser-side hexagon (`domain/`, `ports/`, `adapters/`) | not started | next phase |
+
+The explainer is **rule-based on purpose**: it retrieves the saved posts, chooses
+the chart shape from the data, and writes the paragraph from the same numbers. No
+language model is called, so it runs offline and costs nothing. A real model is the
+next phase and replaces only the wording step.
+
+---
+
+## 8. Honest risks
 
 - Splitting `script.js` (1257 lines, all coupled) is the biggest and least
   glamorous chunk of the work. Do it incrementally: extract one renderer at a time,

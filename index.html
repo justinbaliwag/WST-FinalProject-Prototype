@@ -40,13 +40,13 @@
     // Failsafe: if landing.js never loads, never leave scroll-reveal content hidden
     setTimeout(() => { if (!window.__pvReady) root.classList.add('pv-nojs'); }, 4000);
 
-    /* --- OPTIONAL: play once per session (uncomment to enable) ---
+    /* --- OPTIONAL: play once per session (uncomment to enable) --- */
     const KEY = 'marqueuet_splash_seen';
     try {
         if (sessionStorage.getItem(KEY)) { splash.remove(); announce(); return; }
         sessionStorage.setItem(KEY, '1');
     } catch (_) {}
-    */
+    
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const HOLD_MS = reduced ? 250 : 1000;   // time before exit starts
@@ -526,15 +526,18 @@
                     <div class="legend-items" id="resLegendItems"></div>
                 </div>
 
+                <div class="extra-bars" id="extraCompareBars" hidden></div>
+
                 <!-- ===== VERDICT CARD: the whole answer, in plain words ===== -->
                 <article class="verdict-card" id="verdictCard" aria-live="polite">
                     <div class="verdict-top">
                         <span class="verdict-tag">The short answer</span>
                     </div>
                     <h2 class="verdict-line" id="verdictLine">Jollibee is getting more attention than McDo</h2>
-                    <div class="verdict-split">
+                    <div class="verdict-split" id="verdictSplit">
                         <div class="verdict-bar"><i id="verdictBarA" style="width:57%;background:var(--c0)"></i></div>
                     </div>
+                    <div class="verdict-rails" id="verdictRails" hidden></div>
                     <ul class="verdict-points" id="verdictPoints"></ul>
                     <div class="verdict-foot">
                         <div class="verdict-source">
@@ -544,6 +547,19 @@
                         <button type="button" class="details-btn" id="verdictDetailsBtn" onclick="toggleResultsSection('details', this)">
                             Show the details <small>(2 charts)</small>
                         </button>
+                    </div>
+                </article>
+
+                <!-- ===== EXPLAINER: rule-based answer + the chart chosen to back it up ===== -->
+                <article class="verdict-card" id="explainBox" hidden>
+                    <div class="verdict-top">
+                        <span class="verdict-tag">Plain explanation</span>
+                        <span class="demo-badge" id="explainChart">chart</span>
+                    </div>
+                    <p id="explainAnswer" style="font-size:16px; line-height:1.6; color:var(--ink); margin:8px 0;"></p>
+                    <ul class="verdict-points" id="explainEvidence"></ul>
+                    <div class="verdict-foot">
+                        <span id="explainMethod" style="color:var(--muted); font-size:12px;"></span>
                     </div>
                 </article>
 
@@ -623,6 +639,17 @@
 </div>
 
 <!-- External JS -->
+<script src="js/domain/matchup.js" defer></script>
+<script src="js/domain/verdict.js" defer></script>
+<script src="js/domain/explainer.js" defer></script>
+<script src="js/ports/ports.js" defer></script>
+<script src="js/data/demo-data.js" defer></script>
+<script src="js/adapters/sample-source.js" defer></script>
+<script src="js/adapters/explain-gateway.js" defer></script>
+<script src="js/adapters/post-gateway.js" defer></script>
+<script src="js/application/compare.js" defer></script>
+<script src="js/application/explain.js" defer></script>
+<script src="js/composition/app.js" defer></script>
 <script src="js/script.js" defer></script>
 <script src="js/landing.js" defer></script>
 <script src="js/auth.js" defer></script>
