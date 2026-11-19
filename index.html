@@ -532,13 +532,14 @@
                 <article class="verdict-card" id="verdictCard" aria-live="polite">
                     <div class="verdict-top">
                         <span class="verdict-tag">The short answer</span>
+                        <span class="demo-badge" id="explainChart"></span>
                     </div>
                     <h2 class="verdict-line" id="verdictLine">Jollibee is getting more attention than McDo</h2>
+                    <p class="verdict-where" id="verdictWhere"></p>
                     <div class="verdict-split" id="verdictSplit">
                         <div class="verdict-bar"><i id="verdictBarA" style="width:57%;background:var(--c0)"></i></div>
                     </div>
                     <div class="verdict-rails" id="verdictRails" hidden></div>
-                    <ul class="verdict-points" id="verdictPoints"></ul>
                     <div class="verdict-foot">
                         <div class="verdict-source">
                             <span id="verdictFresh">Based on public posts from the last 30 days</span>
@@ -550,18 +551,6 @@
                     </div>
                 </article>
 
-                <!-- ===== EXPLAINER: rule-based answer + the chart chosen to back it up ===== -->
-                <article class="verdict-card" id="explainBox" hidden>
-                    <div class="verdict-top">
-                        <span class="verdict-tag">Plain explanation</span>
-                        <span class="demo-badge" id="explainChart">chart</span>
-                    </div>
-                    <p id="explainAnswer" style="font-size:16px; line-height:1.6; color:var(--ink); margin:8px 0;"></p>
-                    <ul class="verdict-points" id="explainEvidence"></ul>
-                    <div class="verdict-foot">
-                        <span id="explainMethod" style="color:var(--muted); font-size:12px;"></span>
-                    </div>
-                </article>
 
                 <div class="results-section trinity-grid" id="resultsSectionDetails" hidden>
                     <article class="viz-card col-5">
