@@ -48,9 +48,16 @@ function hashPassword(password) {
 function verifyPassword(password, stored) {
     if (typeof stored !== 'string' || !stored.includes(':')) return false;
     const [salt, hash] = stored.split(':');
-    const test = crypto.scryptSync(password, salt, 64).toString('hex');
-    // constant-time compare so timing cannot leak the password
-    return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(test, 'hex'));
+    if (!salt || !hash || hash.length % 2 !== 0) return false;
+    try {
+        const test = crypto.scryptSync(password, salt, 64).toString('hex');
+        if (hash.length !== test.length) return false;
+        // constant-time compare so timing cannot leak the password
+        return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(test, 'hex'));
+    } catch (_) {
+        // a damaged stored hash means "cannot verify" - never a server crash
+        return false;
+    }
 }
 
 /* ------------------------------ email rules ------------------------------ */
@@ -145,17 +152,31 @@ const sessions = new Map();                     // token -> { email, name, creat
 const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
 const COOKIE = 'mq_session';
 
+/* The 'secure' flag means "send this cookie over HTTPS only". On a local
+   demo the site runs on http://localhost, where a secure cookie would be
+   silently dropped and login would break. So the flag turns on by itself
+   once the request arrives over HTTPS (or when COOKIE_SECURE=true is set
+   in .env for a site you host behind a proxy). */
+function cookieSecure(req) {
+    if ((process.env.COOKIE_SECURE || '').trim().toLowerCase() === 'true') return true;
+    if (!req) return false;
+    if (req.secure) return true;
+    const proto = (req.headers['x-forwarded-proto'] || '').split(',')[0].trim().toLowerCase();
+    return proto === 'https';
+}
+
 function readCookie(req, name) {
     const raw = req.headers.cookie || '';
     const found = raw.split(';').map(s => s.trim()).find(s => s.startsWith(name + '='));
     return found ? decodeURIComponent(found.slice(name.length + 1)) : null;
 }
 
-function createSession(res, user) {
+function createSession(req, res, user) {
     const token = crypto.randomBytes(32).toString('hex');
     sessions.set(token, { email: user.email, name: user.name, createdAt: Date.now() });
     res.cookie(COOKIE, token, {
         httpOnly: true,
+        secure: cookieSecure(req),
         sameSite: 'lax',
         maxAge: SESSION_TTL,
         path: '/'
@@ -182,7 +203,9 @@ setInterval(pruneSessions, 60 * 60 * 1000).unref();
 const router = express.Router();
 
 function clientKey(req) {
-    return req.ip || req.headers['x-forwarded-for'] || 'local';
+    /* Only the real connection address: a visitor cannot pick their own key
+       by sending a header, which would let them dodge the rate limit. */
+    return req.ip || 'local';
 }
 
 /* Live email check used as the user types. */
@@ -232,7 +255,7 @@ router.post('/signup', async (req, res) => {
     };
     users.push(user);
     writeUsers(users);
-    createSession(res, user);
+    createSession(req, res, user);
 
     res.status(201).json({ ok: true, user: { email: user.email, name: user.name } });
 });
@@ -259,7 +282,7 @@ router.post('/signin', (req, res) => {
         return res.status(401).json({ ok: false, reason: 'Email or password is incorrect.' });
     }
 
-    createSession(res, user);
+    createSession(req, res, user);
     res.json({ ok: true, user: { email: user.email, name: user.name } });
 });
 
@@ -274,7 +297,7 @@ router.get('/me', (req, res) => {
 router.post('/signout', (req, res) => {
     const token = readCookie(req, COOKIE);
     if (token) sessions.delete(token);
-    res.clearCookie(COOKIE, { path: '/' });
+    res.clearCookie(COOKIE, { path: '/', secure: cookieSecure(req) });
     res.json({ ok: true });
 });
 
@@ -366,6 +389,7 @@ router.get('/google/start', (req, res) => {
     const state = crypto.randomBytes(24).toString('hex');
     res.cookie(STATE_COOKIE, state, {
         httpOnly: true,
+        secure: cookieSecure(req),
         sameSite: 'lax',
         maxAge: 10 * 60 * 1000,
         path: '/api/auth'
@@ -391,7 +415,7 @@ router.get('/google/callback', async (req, res) => {
         const code = String(req.query.code || '');
         const state = String(req.query.state || '');
         const expected = readCookie(req, STATE_COOKIE);
-        res.clearCookie(STATE_COOKIE, { path: '/api/auth' });
+        res.clearCookie(STATE_COOKIE, { path: '/api/auth', secure: cookieSecure(req) });
 
         if (!code) return back('Google did not return a code. Try again.');
         if (!expected || state !== expected) return back('That sign-in link expired. Please try again.');
@@ -442,7 +466,7 @@ router.get('/google/callback', async (req, res) => {
             writeUsers(users);
         }
 
-        createSession(res, user);
+        createSession(req, res, user);
         res.redirect('/?auth=google');
     } catch (err) {
         console.error('Google sign-in failed:', err.message);

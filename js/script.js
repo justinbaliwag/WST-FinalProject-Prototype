@@ -203,7 +203,7 @@
         };
 
         document.getElementById('exploreMatchupsList').innerHTML = list.map(item => `
-            <button type="button" class="g-suggest-row" onclick="executeComparison('${item.q}')">
+            <button type="button" class="g-suggest-row" onclick="executeComparison(${jsq(item.q)})">
                 ${icons[item.icon] || icons.chart}
                 <span class="g-suggest-title">${item.q}</span>
                 <span class="g-suggest-sub">${item.tag}</span>
@@ -214,14 +214,27 @@
     function renderSidebarRecents() {
         document.getElementById('recentCountLabel').textContent = state.recentHistory.length;
         document.getElementById('sidebarRecentList').innerHTML = state.recentHistory.map(item => `
-            <button type="button" class="recent-chat-row" onclick="executeComparison('${item.query}', '${item.cat}')">
-                <span class="r-label">${item.query}</span>
+            <button type="button" class="recent-chat-row" onclick="executeComparison(${jsq(item.query)}, ${jsq(item.cat)})">
+                <span class="r-label">${esc(item.query)}</span>
                 <svg class="pin-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg>
             </button>
         `).join('');
     }
 
-    /* ==================== 6. RENDER UNPROMPTED "TRENDING NOW" SOCIAL FEED ==================== */
+    /* Text typed by the user (or read from a post) goes through this before it is
+       ever put on the page, so a post caption cannot smuggle HTML in. */
+    function esc(v) {
+        return String(v == null ? '' : v)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+    function attr(v) { return esc(v); }
+    /* A value used inside onclick="...": JSON quoting keeps quotes and
+       apostrophes safe on both the HTML and the JavaScript side. */
+    function jsq(v) { return esc(JSON.stringify(String(v == null ? '' : v))); }
     function renderHomePulse() {
         const filtered = PULSE_POSTS.filter(p =>
             (state.pulseCat === 'all' || p.cat === state.pulseCat) &&
@@ -236,13 +249,13 @@
                     <div class="fc-author">
                         <div class="plat-icon plat-${post.plat}">${platLabel[post.plat]}</div>
                         <div class="fc-handle">
-                            <strong>${post.handle}</strong>
-                            <span>${post.plat.toUpperCase()} • ${post.time}</span>
+                            <strong>${esc(post.handle)}</strong>
+                            <span>${esc(post.plat).toUpperCase()} • ${esc(post.time)}</span>
                         </div>
                     </div>
                     <span class="sent-badge ${post.sentClass}">${post.sentiment}</span>
                 </div>
-                <p class="fc-caption">${post.caption}</p>
+                <p class="fc-caption">${esc(post.caption)}</p>
                 <div class="fc-metrics-bar">
                     <div class="fc-stats">
                         <span>Views: <b>${post.views}</b></span>
@@ -250,8 +263,8 @@
                         <span>Depth: <b>${post.ratio}</b></span>
                         <span style="color:var(--ok); font-weight:700;">${post.velocity}</span>
                     </div>
-                    <button type="button" class="fc-compare-btn" onclick="executeComparison('${post.matchup}', '${post.mode}')">
-                        Compare ${post.matchup} &rarr;
+                    <button type="button" class="fc-compare-btn" onclick="executeComparison(${jsq(post.matchup)}, ${jsq(post.mode)})">
+                        Compare ${esc(post.matchup)} &rarr;
                     </button>
                 </div>
             </article>
@@ -266,7 +279,7 @@
         ];
 
         document.getElementById('pulseLeaderboard').innerHTML = leaders.map(l => `
-            <div class="trend-row" onclick="executeComparison('${l.match}', '${l.mode}')">
+            <div class="trend-row" onclick="executeComparison(${jsq(l.match)}, ${jsq(l.mode)})">
                 <div class="t-rank">${l.rank}</div>
                 <div class="t-info">
                     <strong>${l.tag}</strong>
@@ -294,7 +307,7 @@
                 svg: `<svg viewBox="0 0 120 44" width="100%" height="100%"><circle cx="60" cy="22" r="15" fill="none" stroke="var(--c0)" stroke-width="6" stroke-dasharray="52 100"/><circle cx="60" cy="22" r="15" fill="none" stroke="var(--c1)" stroke-width="6" stroke-dasharray="48 100" stroke-dashoffset="-52"/></svg>`
             }
         ].map(c => `
-            <div class="mini-card" onclick="executeComparison('${c.title}', '${c.mode}')">
+            <div class="mini-card" onclick="executeComparison(${jsq(c.title)}, ${jsq(c.mode)})">
                 <div class="mini-svg-wrap">${c.svg}</div>
                 <h4>${c.title}</h4>
                 <span>${c.sub}</span>
@@ -338,7 +351,7 @@
         document.getElementById('resLegendItems').innerHTML = list.map(e => `
             <div class="l-chip">
                 <span class="l-dot" style="background:${e.color.hex}"></span>
-                <span>${e.name}</span>
+                <span>${esc(e.name)}</span>
                 <small>${e.mentions.toLocaleString()} posts &bull; ${Math.round(e.mentions / totMentions * 100)}% of the talk</small>
             </div>
         `).join('');
@@ -1086,7 +1099,7 @@
             document.getElementById('guardrailHeading').textContent = 'At least Two Equal Entities Required';
             document.getElementById('guardrailText').textContent = `Enter at least two competing ${state.category}s separated by "vs" (up to ${result.max}).`;
             document.getElementById('guardrailButtons').innerHTML = `
-                <button type="button" class="fix-chip" onclick="executeComparison('${result.first} vs ${result.rival}')">Compare ${result.first} vs ${result.rival}</button>
+                <button type="button" class="fix-chip" onclick="executeComparison(${jsq(result.first + ' vs ' + result.rival)})">Compare ${esc(result.first)} vs ${esc(result.rival)}</button>
             `;
             card.classList.add('visible');
             switchView('compare');
@@ -1102,7 +1115,7 @@
             document.getElementById('guardrailHeading').textContent = heading;
             document.getElementById('guardrailText').textContent = `This demo only knows a fixed set of ${state.category}s, and it will not invent numbers for a name it has never seen. Compare one of these instead (up to ${result.max} at once):`;
             document.getElementById('guardrailButtons').innerHTML = result.suggestions.map(item => `
-                <button type="button" class="fix-chip" onclick="executeComparison('${item.q}')">${item.q}</button>
+                <button type="button" class="fix-chip" onclick="executeComparison(${jsq(item.q)})">${esc(item.q)}</button>
             `).join('');
             card.classList.add('visible');
             switchView('compare');
@@ -1115,8 +1128,8 @@
             document.getElementById('guardrailHeading').textContent = `Not a fair comparison: "${brandItem.name}" is a brand, "${prodItem.name}" is one product`;
             document.getElementById('guardrailText').textContent = `A whole brand and a single product can't be compared fairly. Pick two of the same kind:`;
             document.getElementById('guardrailButtons').innerHTML = `
-                <button type="button" class="fix-chip" onclick="executeComparison('${brandItem.name} vs ${result.brandPeer}', 'brand')">Brands: ${brandItem.name} vs ${result.brandPeer}</button>
-                <button type="button" class="fix-chip" onclick="executeComparison('${result.skuPeer} vs ${prodItem.name}', 'product')">Products: ${result.skuPeer} vs ${prodItem.name}</button>
+                <button type="button" class="fix-chip" onclick="executeComparison(${jsq(brandItem.name + ' vs ' + result.brandPeer)}, 'brand')">Brands: ${esc(brandItem.name)} vs ${esc(result.brandPeer)}</button>
+                <button type="button" class="fix-chip" onclick="executeComparison(${jsq(result.skuPeer + ' vs ' + prodItem.name)}, 'product')">Products: ${esc(result.skuPeer)} vs ${esc(prodItem.name)}</button>
             `;
             card.classList.add('visible');
             switchView('compare');
@@ -1125,7 +1138,7 @@
 
         const profiles = result.profiles;
         card.classList.remove('visible');
-        state.activeQuery = result.query;
+        state.activeQuery = String(result.query).slice(0, 120);
         state.activeProfiles = profiles;
 
         if (!state.recentHistory.some(r => r.query.toLowerCase() === state.activeQuery.toLowerCase())) {
