@@ -2168,6 +2168,17 @@
             margin: 0 0 18px;
         }
 
+        .verdict-where {
+            margin: -8px 0 16px;
+            font-size: 14.5px;
+            line-height: 1.45;
+            color: var(--muted);
+        }
+
+        .verdict-where:empty {
+            display: none;
+        }
+
         .verdict-split {
             height: 14px;
             border-radius: 999px;

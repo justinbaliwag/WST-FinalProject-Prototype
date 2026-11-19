@@ -67,6 +67,12 @@ window.WSTDomain = window.WSTDomain || {};
             `${chattiest.name} has the liveliest comments: ${chattiest.commentRatio} replies per 100 likes.`
         ];
 
+        /* One short line for the card. Everything above is still kept for
+           anyone who opens the full report. */
+        const summary = `${shareList}. ${friendliest.name} feels friendlier` +
+            (fastest.name === friendliest.name ? ' and also grows fastest' : `, ${fastest.name} grows faster`) +
+            '.';
+
         if (typeof retrievedCount === 'number') {
             sentences.push(
                 `Backed by ${retrievedCount} saved ${retrievedCount === 1 ? 'post' : 'posts'} from the local store.`
@@ -76,6 +82,7 @@ window.WSTDomain = window.WSTDomain || {};
         return {
             sentences,
             answer: sentences.join(' '),
+            summary,
             chart: chooseChart(list.length),
             ranked,
             chartData: {

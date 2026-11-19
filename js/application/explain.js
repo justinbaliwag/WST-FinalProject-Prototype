@@ -38,6 +38,7 @@ window.WSTApp = window.WSTApp || {};
                         ok: true,
                         source: 'server',
                         answer: data.answer,
+                        summary: data.summary || data.answer,
                         chart: data.chart,
                         note: data.note,
                         evidence: data.evidence || []
@@ -60,6 +61,7 @@ window.WSTApp = window.WSTApp || {};
                 ok: true,
                 source: 'offline',
                 answer: local.answer,
+                summary: local.summary,
                 chart: local.chart,
                 note: 'Written by fixed rules on this page (the server was not reachable). No language model was called.',
                 evidence: retrieved.slice(0, 3).map(p => ({ author: p.author, caption: p.caption, url: p.url }))

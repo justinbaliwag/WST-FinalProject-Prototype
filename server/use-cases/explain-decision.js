@@ -109,10 +109,16 @@ function explain(query, profiles) {
         `Backed by ${retrieved.posts.length} saved ${retrieved.posts.length === 1 ? 'post' : 'posts'} from the local store.`
     ];
 
+    /* One short line for the card; `answer` keeps the full text for reports. */
+    const summary = `${shareList}. ${friendliest.name} feels friendlier` +
+        (fastest.name === friendliest.name ? ' and also grows fastest' : `, ${fastest.name} grows faster`) +
+        '.';
+
     return {
         ok: true,
         chart,
         answer: sentences.join(' '),
+        summary,
         paragraphs: sentences,
         evidence: retrieved.posts.slice(0, 3).map(p => ({
             author: p.author,

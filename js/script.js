@@ -170,6 +170,7 @@
         pulsePlat: 'all',
         activeQuery: 'Jollibee vs McDo',
         activeProfiles: [],
+        explainEvidence: [],
         recentHistory: [
             { query: 'Jollibee vs McDo', cat: 'brand', pinned: true },
             { query: 'KKOPI vs BigBrew', cat: 'brand', pinned: true },
@@ -365,10 +366,8 @@
 
     /* ===== EXPLAINER: ask the server for the rule-based answer + chart choice ===== */
     function explainWithServer() {
-        const box = document.getElementById('explainBox');
-        if (!box) return;
         const list = state.activeProfiles;
-        if (!list || list.length < 2) { box.hidden = true; return; }
+        if (!list || list.length < 2) return;
 
         const payload = {
             query: state.activeQuery,
@@ -382,10 +381,10 @@
         if (explainer) {
             explainer.run(list, state.activeQuery)
                 .then(data => {
-                    if (!data || !data.ok) { box.hidden = true; return; }
-                    showExplanation(box, data.answer, data.chart, data.note, data.evidence);
+                    if (!data || !data.ok) return;
+                    showExplanation(document.getElementById('verdictWhy'), data.summary || data.answer, data.chart, data.note, data.evidence);
                 })
-                .catch(() => { box.hidden = true; });
+                .catch(() => {});
             return;
         }
 
@@ -396,23 +395,23 @@
         })
             .then(r => r.json())
             .then(data => {
-                if (!data || !data.ok) { box.hidden = true; return; }
-                showExplanation(box, data.answer, data.chart, data.note, data.evidence);
+                if (!data || !data.ok) return;
+                showExplanation(document.getElementById('verdictWhy'), data.summary || data.answer, data.chart, data.note, data.evidence);
             })
-            .catch(() => { box.hidden = true; });
+            .catch(() => {});
     }
 
-    /* Draw the explainer's reply. One place, so the plugged path and the
-       direct path look identical. */
+    /* The explainer only decorates the one card now: a chart badge, and the
+       posts it found kept for the full report. The sentence stays the
+       verdict's own, so the card never says the same thing twice. */
     function showExplanation(box, answer, chart, note, evidence) {
-        box.hidden = false;
-        document.getElementById('explainAnswer').textContent = answer || '';
-        document.getElementById('explainChart').textContent =
-            chart ? `Chart chosen for this data: ${chart}` : '';
-        document.getElementById('explainMethod').textContent = note || '';
-        document.getElementById('explainEvidence').innerHTML = (evidence || []).map(ev =>
-            `<li><b>${ev.author}</b> — ${ev.caption}</li>`
-        ).join('');
+        const badge = document.getElementById('explainChart');
+        if (badge) {
+            badge.textContent = chart ? `Chart: ${chart}` : '';
+            badge.title = note || '';
+            badge.hidden = !chart;
+        }
+        state.explainEvidence = evidence || [];
     }
 
     /* ===== VERDICT: one plain answer built from the same numbers the charts use ===== */
@@ -422,11 +421,9 @@
 
         const data = window.WST.domain.summarise(list);
         document.getElementById('verdictLine').textContent = data.sentence;
+        const where = document.getElementById('verdictWhere');
+        if (where) where.textContent = data.where || '';
         renderVerdictShares(data.ranked);
-
-        document.getElementById('verdictPoints').innerHTML = data.points.map(([label, text]) =>
-            `<li><span class="dot"></span><span><b>${label}:</b> ${text}</span></li>`
-        ).join('');
 
         document.getElementById('verdictFresh').textContent =
             `${data.total.toLocaleString()} public posts, last 30 days`;
