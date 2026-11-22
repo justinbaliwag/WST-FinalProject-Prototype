@@ -11,36 +11,55 @@ This repository contains the source code for the **Marqueuet** project. If you a
 
 ##  Project Directory Structure
 ```text
-Marqueuet/
-server/
-├── index.js            (entry point: just starts the server)
-├── composition/app.js  (the one place that joins everything together)
-├── edge/routes.js      (web routes: search, posts, explain, auth)
-├── use-cases/          (what the app does: search-posts, explain-decision)
+WST-FinalProject-Prototype/
+server/                  (the back end, same shape as the browser side)
+├── index.js             (entry point: just starts the server)
+├── composition/app.js   (the one place that joins everything together)
+├── edge/routes.js       (web routes: search, posts, explain, auth)
+├── use-cases/           (what the app does: search-posts, explain-decision)
 ├── cleaning/pipeline.js (rules that drop spam, reposts and off-topic posts)
-├── store/post-store.js (saves cleaned posts to data/posts.json)
-├── adapters/           (outside sources: sample data, TikTok via Apify)
-├── config/settings.js  (the one file that picks the data source)
-├── auth.js             (local sign up / sign in / guest + Google)
-└── .data/              (local accounts file, git-ignored)
+├── store/post-store.js  (saves cleaned posts to data/posts.json)
+├── adapters/            (outside sources: sample data, TikTok via Apify)
+├── config/settings.js   (the one file that picks the data source)
+├── auth.js              (local sign up / sign in / guest + Google)
+├── .data/               (local accounts file, git-ignored)
+└── data/posts.json      (cleaned posts saved by the server)
 css/
-├── style.css         (Apple-grade translucent glassmorphism & styles)
-└── auth.css          (sign-in sheet styles)
+├── style.css            (Apple-grade translucent glassmorphism & styles)
+└── auth.css             (sign-in sheet styles)
 js/
-├── data/demo-data.js (ALL sample data: entities, matchups, feed posts)
-├── script.js         (spring physics, charts, compare + explain logic)
-├── landing.js        (Header, scroll reveals, typewriter)
-└── auth.js           (Sign-in sheet on the landing page)
-data/                 (cleaned posts saved by the server, git-ignored)
-docs/                 (Architecture + Google setup guides)
-index.html            (Structure & semantic markup only)
-.env.example          (copy to .env only for live data)
-README.md             (Team documentation & deployment guides)
+├── data/demo-data.js    (ALL sample data: entities, matchups, feed posts)
+├── domain/                  (pure rules, no page and no network)
+│   ├── matchup.js           (splits typed text into brand names, drops filler)
+│   ├── verdict.js           (scores, headline, "who leads where")
+│   └── explainer.js         (picks the chart type by rule, writes the short line)
+├── application/             (what the page can ask for)
+│   ├── compare.js           (build a comparison from the names typed)
+│   └── explain.js           (ask for the plain-English answer)
+├── ports/ports.js           (the labelled doors: content source, account, explain)
+├── adapters/                (the plugs behind those doors)
+│   ├── sample-source.js     (built-in sample posts, works with no keys)
+│   ├── post-gateway.js      (cleaned posts from the server)
+│   └── explain-gateway.js   (server explanation)
+├── composition/app.js       (the one place that decides which plug is in use)
+├── script.js                (page layer: draws and listens only)
+├── landing.js               (Header, scroll reveals, typewriter)
+└── auth.js                  (Sign-in sheet on the landing page)
+docs/                      (Architecture + Google setup guides)
+index.html                 (Structure & semantic markup only)
+package.json               (scripts and dependencies)
+package-lock.json          (exact package versions, keep it in Git)
+.env.example               (copy to .env only for live data)
+.gitignore                 (keeps node_modules, .env and accounts out of Git)
+README.md                  (Team documentation & deployment guides)
 ```
 
 * **`index.html`**: Handles the layout, sections, navigation bars, and modals.
-* **`style.css`**: Handles color palettes, typography, responsive grids, and translucent blur materials.
-* **`script.js`**: Handles the comparison input, charts, spring interactions and the plain-English explainer.
+* **`css/style.css`**: Handles color palettes, typography, responsive grids, and translucent blur materials.
+* **`script.js`**: Page layer only — draws the charts, reads input, listens for clicks. The rules and data sit behind it.
+* **`domain/`**: The pure rules. Give it posts, it returns numbers — no page, no network, so it can be swapped or tested alone.
+* **`ports/` + `adapters/`**: Small labelled doors and the plugs behind them. Sample data and real TikTok are two plugs for the same door.
+* **`composition/app.js`**: The single file that chooses which plug is in use. Swapping sample data for live posts is one line here, not a rewrite.
 * **`demo-data.js`**: Holds every sample number the app shows. Change this file only, and the whole demo shows a different dataset.
 ---
 
