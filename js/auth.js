@@ -344,8 +344,10 @@
     };
 
     /* ----------------------------- google status --------------------------- */
-    // Ask the server whether Google is set up. If not, the button says why
-    // instead of sending anyone to a broken page.
+    // Ask the server whether Google is set up. When it is not (no GOOGLE_CLIENT_ID
+    // and GOOGLE_CLIENT_SECRET in .env), the button and its "or" divider are taken
+    // off the sheet entirely, so a fresh clone shows only email/password and guest.
+    const googleOr = scrim.querySelector('.mq-auth-or');
     let googleAvailable = false;
     async function checkGoogle() {
         try {
@@ -353,11 +355,12 @@
             const data = await r.json();
             googleAvailable = !!data.available;
             googleBtn.dataset.reason = data.reason || '';
-            googleBtn.classList.toggle('is-off', !googleAvailable);
-            if (!googleAvailable) googleBtn.setAttribute('aria-describedby', 'mqGoogleNote');
         } catch (_) {
             googleAvailable = false;
         }
+        googleBtn.hidden = !googleAvailable;
+        googleBtn.setAttribute('aria-hidden', String(!googleAvailable));
+        if (googleOr) googleOr.hidden = !googleAvailable;
         return googleAvailable;
     }
 

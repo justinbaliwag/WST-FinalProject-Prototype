@@ -257,7 +257,12 @@
 
 .mq-auth-google svg { width: 17px; height: 17px; flex: none; }
 
-/* Google not configured yet: dimmed, but still clickable so it can explain. */
+/* Google not configured (no keys in .env): the button and its "or" divider
+   are taken off the sheet, so the rule below has to beat the flex display. */
+.mq-auth-google[hidden],
+.mq-auth-or[hidden] { display: none !important; }
+
+/* Kept for the split second before the server answers google-status. */
 .mq-auth-google.is-off {
     opacity: .62;
     border-style: dashed;
